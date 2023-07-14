@@ -37,20 +37,21 @@ def get_transaction_status(request):
                                 json={
                                     "jsonrpc": "2.0",
                                     "id": 1,
-                                    "method": "eth_getUserOperationByHash",
+                                    "method": "eth_getUserOperationReceipt",
                                     "params": [userophash]
                                 })
         response_json = response.json()
         logging.warning(response_json)
 
         if 'error' in response_json:
-            return JsonResponse({'status': 0})
+            return JsonResponse({'status': "pending"})
 
-        transactionhash = response_json['result']['transactionHash']
+        transactionhash = response_json['result']['logs']['transactionHash']
+        success = response_json['result']['success']
         user_operation = UserOperationHash(userophash=userophash, transactionhash=transactionhash)
         user_operation.save()
 
-        transaction_status = TransactionStatus(transactionhash=transactionhash, status=0)
+        transaction_status = TransactionStatus(transactionhash=transactionhash, status=('pending' if success == "true" else 'failed'))
         transaction_status.save()
 
         return JsonResponse({'status': transaction_status.status, 'transactionhash': transactionhash})
