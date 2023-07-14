@@ -20,7 +20,7 @@ def get_transaction_status(request):
         try:
             transaction_status = TransactionStatus.objects.get(transactionhash=transactionhash)
         except TransactionStatus.DoesNotExist:
-            transaction_status = TransactionStatus(transactionhash=transactionhash, status=0)
+            transaction_status = TransactionStatus(transactionhash=transactionhash, status='pending')
             transaction_status.save()
 
         return JsonResponse({'status': transaction_status.status, 'transactionhash': transactionhash})
@@ -51,7 +51,9 @@ def get_transaction_status(request):
         user_operation = UserOperationHash(userophash=userophash, transactionhash=transactionhash)
         user_operation.save()
 
-        transaction_status = TransactionStatus(transactionhash=transactionhash, status=('pending' if success == "true" else 'failed'))
+        logging.error(('pending' if success == "true" else 'failed'))
+        transaction_status = TransactionStatus(transactionhash=transactionhash, status=('pending' if success is True else 'failed'))
+
         transaction_status.save()
 
         return JsonResponse({'status': transaction_status.status, 'transactionhash': transactionhash})
