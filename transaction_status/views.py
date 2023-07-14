@@ -1,0 +1,56 @@
+import os
+import requests
+import logging
+import json
+
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+from .models import UserOperationHash, TransactionStatus
+
+@csrf_exempt
+def get_transaction_status(request):
+    data = json.loads(request.body)
+    chain = data.get('chain')
+    userophash = data.get('userophash')
+
+    try:
+        user_operation = UserOperationHash.objects.get(userophash=userophash)
+        transactionhash = user_operation.transactionhash
+
+        try:
+            transaction_status = TransactionStatus.objects.get(transactionhash=transactionhash)
+        except TransactionStatus.DoesNotExist:
+            transaction_status = TransactionStatus(transactionhash=transactionhash, status=0)
+            transaction_status.save()
+
+        return JsonResponse({'status': transaction_status.status, 'transactionhash': transactionhash})
+
+    except UserOperationHash.DoesNotExist:
+        logging.warning({
+            "jsonrpc": "2.0",
+            "id": 1,
+            "method": "eth_getUserOperationByHash",
+            "params": [userophash]
+        })
+        logging.warning(f'{os.environ["BUNDLER_URL"]}/{chain}')
+        response = requests.post(f'{os.environ["BUNDLER_URL"]}/{chain}',
+                                json={
+                                    "jsonrpc": "2.0",
+                                    "id": 1,
+                                    "method": "eth_getUserOperationByHash",
+                                    "params": [userophash]
+                                })
+        response_json = response.json()
+        logging.warning(response_json)
+
+        if 'error' in response_json:
+            return JsonResponse({'status': 0})
+
+        transactionhash = response_json['result']['transactionHash']
+        user_operation = UserOperationHash(userophash=userophash, transactionhash=transactionhash)
+        user_operation.save()
+
+        transaction_status = TransactionStatus(transactionhash=transactionhash, status=0)
+        transaction_status.save()
+
+        return JsonResponse({'status': transaction_status.status, 'transactionhash': transactionhash})
