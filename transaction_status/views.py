@@ -46,7 +46,7 @@ def get_transaction_status(request):
         if 'error' in response_json:
             return JsonResponse({'status': "pending"})
 
-        transactionhash = response_json['result']['logs']['transactionHash']
+        transactionhash = response_json['result']['logs'][0]['transactionHash']
         success = response_json['result']['success']
         user_operation = UserOperationHash(userophash=userophash, transactionhash=transactionhash)
         user_operation.save()
