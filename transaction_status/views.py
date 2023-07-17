@@ -3,11 +3,13 @@ import requests
 import logging
 import json
 
+from django.db import transaction
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from .models import UserOperationHash, TransactionStatus
 
 @csrf_exempt
+@transaction.atomic
 def get_transaction_status(request):
     data = json.loads(request.body)
     chain = data.get('chain')
@@ -18,7 +20,7 @@ def get_transaction_status(request):
         transactionhash = user_operation.transactionhash
 
         try:
-            transaction_status = TransactionStatus.objects.get(transactionhash=transactionhash)
+            transaction_status = TransactionStatus.objects.select_for_update().get(transactionhash=transactionhash)
         except TransactionStatus.DoesNotExist:
             transaction_status = TransactionStatus(transactionhash=transactionhash, status='pending')
             transaction_status.save()
@@ -53,8 +55,7 @@ def get_transaction_status(request):
 
         logging.error(('pending' if success == "true" else 'failed'))
 
-        if success is not True:
-            transaction_status = TransactionStatus(transactionhash=transactionhash, status=('failed'))
-            transaction_status.save()
+        transaction_status = TransactionStatus(transactionhash=transactionhash, status=('pending' if success is True else 'failed'))
+        transaction_status.save()
 
         return JsonResponse({'status': transaction_status.status, 'transactionhash': transactionhash})
