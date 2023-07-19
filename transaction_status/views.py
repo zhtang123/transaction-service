@@ -27,7 +27,7 @@ def get_transaction_status(request):
     except UserOperationHash.DoesNotExist:
         try:
             schedule_status = ScheduledUserOp.objects.get(userophash=userophash)
-            if schedule_status.status is not 'completed':
+            if not schedule_status.status == 'completed':
                 return JsonResponse({'status': schedule_status.status})
         except:
             pass
