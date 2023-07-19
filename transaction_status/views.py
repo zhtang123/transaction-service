@@ -5,7 +5,7 @@ import json
 
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
-from .models import UserOperationHash, TransactionStatus
+from .models import UserOperationHash, TransactionStatus, ScheduledUserOp
 
 @csrf_exempt
 def get_transaction_status(request):
@@ -25,6 +25,12 @@ def get_transaction_status(request):
         return JsonResponse({'status': transaction_status.status, 'transactionhash': transactionhash})
 
     except UserOperationHash.DoesNotExist:
+        try:
+            schedule_status = ScheduledUserOp.objects.get(userophash=userophash)
+            if schedule_status.status is not 'completed':
+                return JsonResponse({'status': schedule_status.status})
+        except:
+            pass
         logging.warning({
             "jsonrpc": "2.0",
             "id": 1,

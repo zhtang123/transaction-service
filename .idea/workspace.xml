@@ -5,6 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9e421e7f-3bf6-4277-a19b-1fd3c97b46b2" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.env" beforeDir="false" afterPath="$PROJECT_DIR$/.env" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/transaction_service/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/transaction_service/settings.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/transaction_status/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/transaction_status/models.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/transaction_status/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/transaction_status/views.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -16,12 +21,16 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="ProjectId" id="2SXoFlSOeUD5jeGdmetNrsOKQ15" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
+    "ASKED_ADD_EXTERNAL_FILES": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "WebServerToolWindowFactoryState": "false",
     "last_opened_file_path": "/Users/eden/Desktop/transaction_service",
@@ -66,12 +75,17 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1689302185176</updated>
-      <workItem from="1689302188008" duration="18577000" />
+      <workItem from="1689302188008" duration="20220000" />
+      <workItem from="1689646449285" duration="88000" />
+      <workItem from="1689649428286" duration="4799000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
