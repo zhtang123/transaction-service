@@ -9,6 +9,13 @@ class ScheduledUserOp(models.Model):
     class Meta:
         db_table = 'scheduled_userop'
 
+class ModifiedUserOp(models.Model):
+    old_userophash = models.CharField(max_length=255, primary_key=True)
+    new_userophash = models.CharField(max_length=255)
+
+    class Meta:
+        db_table = 'modified_userop'
+
 
 class UserOperationHash(models.Model):
     userophash = models.CharField(max_length=255, primary_key=True)
